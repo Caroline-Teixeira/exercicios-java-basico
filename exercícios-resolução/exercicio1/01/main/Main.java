@@ -1,7 +1,7 @@
 import java.util.Scanner;
 import java.time.Year;
 
-public class Idade {
+public class Main {
 
     // 1. Escreva um código que receba o nome e o ano de nascimento de alguém e imprima na tela a seguinte mensagem: "Olá 'Fulano' você tem 'X' anos"
     public static void main(String[] args) {
