@@ -2,89 +2,104 @@ import java.util.Scanner;
 
 public class Main {
 
-  private static final Scanner scanner = new java.util.Scanner(
-    System.in
-  ).useDelimiter("\\n");
-  private static PetMachine petMachine = new PetMachine();
+  private static Scanner scanner = new Scanner(System.in);
 
   public static void main(String[] args) {
-    System.out.println("Petshop - Banho e Tosa");
+    System.out.println("=== SISTEMA BANCÁRIO ===");
+    System.out.println("Bem-vindo ao sistema bancário!");
 
-    var option = -1;
+    // Criar conta
+    System.out.println("Digite seu nome: ");
+    String name = scanner.nextLine();
+
+    System.out.println("Digite o número da conta: ");
+    String accountNumber = scanner.nextLine();
+
+    System.out.printf("Digite o saldo inicial: R$ %.2f%n", 0.00);
+    double initialBalance = scanner.nextDouble();
+
+    User user = new User(name, accountNumber);
+    BankAccount account = new BankAccount(user, initialBalance);
+
+    System.out.println("\nConta criada com sucesso!");
+    account.displayAccountInfo();
+
+    // Menu de opções
+    int option;
 
     do {
-      System.out.println("##Escolha uma opção:##");
-      System.out.println("1 - Colocar Pet na máquina");
-      System.out.println("2 - Adicionar água");
-      System.out.println("3 - Adicionar shampoo");
-      System.out.println("4 - Verificar nível de água");
-      System.out.println("5 - Verificar nível de shampoo");
-      System.out.println("6 - Verificar se tem Pet na máquina");
-      System.out.println("7 - Dar banho no Pet");
-      System.out.println("8 - Remover Pet da máquina");
-      System.out.println("9 - Limpar a máquina");
-      System.out.println("0 - Sair");
-      try {
-        option = Integer.parseInt(scanner.nextLine().trim()); // Lê a linha e converte para inteiro
-      } catch (NumberFormatException e) {
-        option = -1; // Define como inválido se não for um número
-        System.out.println("Opção inválida. Tente novamente.");
-        continue;
-      }
+      showMenu();
+      System.out.print("Escolha uma opção: ");
+      option = scanner.nextInt();
 
       switch (option) {
-        case 1 -> setPetinPetMachine();
-        case 2 -> setWater();
-        case 3 -> setShampoo();
-        case 4 -> checkWaterLevel();
-        case 5 -> checkShampooLevel();
-        case 6 -> checkIfHasPet();
-        case 7 -> petMachine.shower();
-        case 8 -> petMachine.removePet();
-        case 9 -> petMachine.cleanMachine();
-        case 0 -> {
-          System.out.println("Saindo...");
-          System.exit(0);
+        case 1 -> account.checkBalance();
+        case 2 -> account.checkOverDraft();
+        case 3 -> {
+          System.out.print("Digite o valor para depósito: R$ ");
+          double depositAmount = scanner.nextDouble();
+          account.deposit(depositAmount);
         }
-        default -> System.out.println("Opção inválida. Tente novamente.");
+        case 4 -> {
+          System.out.print("Digite o valor para saque: R$ ");
+          double withdrawAmount = scanner.nextDouble();
+          account.withdraw(withdrawAmount);
+        }
+        case 5 -> {
+          System.out.print("Digite o valor do boleto: R$ ");
+          double billAmount = scanner.nextDouble();
+          account.payBill(billAmount);
+        }
+        case 6 -> account.checkOverDraftUsage();
+        case 7 -> account.payDebt();
+        case 8 -> account.displayAccountInfo();
+        case 9 -> { // transferência
+                System.out.println("\n=== TRANSFERÊNCIA ===");
+                    System.out.print("Digite o nome do destinatário: ");
+                    String targetName = scanner.next();
+                    scanner.nextLine(); // Limpa o buffer
+                    System.out.print("Digite o número da conta do destinatário: ");
+                    String targetAccountNumber = scanner.next();
+                    scanner.nextLine(); // Limpa o buffer
+                    System.out.print("Digite o valor para transferência: R$ ");
+                    double transferAmount = scanner.nextDouble();
+                    scanner.nextLine();
+
+                    // Cria uma conta temporária para o destinatário
+                    User targetUser = new User(targetName, targetAccountNumber);
+                    BankAccount targetAccount = new BankAccount(targetUser, 0.0);
+
+                    // Realiza a transferência
+                    account.transfer(targetAccount, transferAmount);
+            }
+        case 0 -> System.out.println(
+          "Obrigado por usar nosso sistema bancário!"
+        );
+        default -> System.out.println("Opção inválida! Tente novamente.");
       }
-    } while (true);
+
+      if (option != 0) {
+        System.out.println("\n Pressione qualquer tecla para continuar...");
+        scanner.nextLine();
+        scanner.nextLine();
+      }
+    } while (option != 0);
+
+    scanner.close();
   }
 
-  public static void setPetinPetMachine() {
-    var name = "";
-    while (name == null || name.trim().isEmpty()) { // Usando trim() para ignorar espaços em branco
-      System.out.println("Informe o nome do Pet: ");
-      name = scanner.nextLine(); // Alterado para nextLine()
-    }
-
-    var pet = new Pet(name);
-    petMachine.setPet(pet);
-    //System.out.println("Pet: " + pet.getName() + " adicionado à máquina.");
-  }
-
-  private static void checkIfHasPet() {
-    var hasPet = petMachine.hasPet();
-    System.out.println(hasPet ? "Tem pet na máquina" : "A máquina está vazia"); // Ternário: if else
-  }
-
-  private static void checkWaterLevel() {
-    var amount = petMachine.getWater();
-    System.out.println("A máquina está com " + amount + " litros de água");
-  }
-
-  private static void checkShampooLevel() {
-    var amount = petMachine.getShampoo();
-    System.out.println("A máquina está com " + amount + " litros de shampoo");
-  }
-
-  private static void setWater() {
-    System.out.println("Testando colocar água na máquina");
-    petMachine.addWater();
-  }
-
-  private static void setShampoo() {
-    System.out.println("Testando colocar shampoo na máquina");
-    petMachine.addShampoo();
+  private static void showMenu() {
+    System.out.println("\n=== MENU PRINCIPAL ===");
+    System.out.println("1. Consultar saldo");
+    System.out.println("2. Consultar cheque especial");
+    System.out.println("3. Depositar dinheiro");
+    System.out.println("4. Sacar dinheiro");
+    System.out.println("5. Pagar boleto");
+    System.out.println("6. Verificar uso do cheque especial");
+    System.out.println("7. Pagar dívida do cheque especial");
+    System.out.println("8. Exibir informações da conta");
+    System.out.println("9. Transferir dinheiro");
+    System.out.println("0. Sair");
+    System.out.println("=====================");
   }
 }
