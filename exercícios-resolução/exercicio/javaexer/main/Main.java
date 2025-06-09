@@ -3,7 +3,9 @@ import java.util.Scanner;
 public class Main {
 
   public static void main(String[] args) {
-    try (Scanner keyboard = new Scanner(System.in)) {
+    System.out.println("\n===== RELOGIO =====");
+    Scanner keyboard = new Scanner(System.in);
+    /*try (Scanner keyboard = new Scanner(System.in)) {
       Car car = new Car();
       int option = -1;
       
@@ -64,7 +66,7 @@ public class Main {
         }
         
       } while (true);
-    }
+    }*/
     
     
   }
