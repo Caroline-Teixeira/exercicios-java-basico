@@ -1,4 +1,4 @@
-import java.util.InputMismatchException;
+
 import java.util.Scanner;
 
 public class Main {
@@ -6,26 +6,27 @@ public class Main {
   private static Scanner scanner = new Scanner(System.in);
 
   public static void main(String[] args) {
-    System.out.println("Calculando a Área de Figuras Geométricas");
+    System.out.println("Mensagens Automáticas");
     System.out.println("=========================================");
 
     int option;
 
     do {
       displayMenu();
-      try{
-      option = scanner.nextInt();
+      try {
+        option = scanner.nextInt();
       } catch (Exception e) {
         System.out.println("Entrada inválida! Digite um número válido.");
         scanner.nextLine(); // Limpa o buffer do scanner
         option = -1; // Define uma opção inválida para continuar o loop
       }
-      
-      
+
       switch (option) {
-        case 1 -> calculateRectangle();
-        case 2 -> calculateSquare();
-        case 3 -> calculateSphere();
+        case 1 -> sendSMS();
+        case 2 -> sendEmail();
+        case 3 -> sendInstagram();
+        case 4 -> sendWhatsApp();
+        case 5 -> sendX();
         case 0 -> System.out.println("Saindo...");
         default -> System.out.println("Opção inválida. Tente novamente.");
       }
@@ -34,60 +35,41 @@ public class Main {
 
   public static void displayMenu() {
     System.out.println("Escolha uma opção:");
-    System.out.println("1. Retângulo");
-    System.out.println("2. Quadrado");
-    System.out.println("3. Esfera");
+    System.out.println("1. SMS");
+    System.out.println("2. Email");
+    System.out.println("3. Instagram");
+    System.out.println("4. WhatsApp");
+    System.out.println("5. X");
     System.out.println("0. Sair");
   }
 
-  public static void calculateRectangle() {
-    try{
-        System.out.print("Digite o comprimento do retângulo (cm): ");
-        double length = scanner.nextDouble();
-        System.out.print("Digite a largura do retângulo (cm): ");
-        double width = scanner.nextDouble();
-
-        Rectangle rectangle = new Rectangle(length, width);
-        System.out.printf(
-        "A área do retângulo é: %.2f%n",
-        rectangle.calculateArea()
-        );
-
-    } catch (InputMismatchException e) {
-       System.out.println("Entrada inválida! Digite um número válido.");
-       scanner.nextLine(); // Limpa o buffer do scanner
-    }
+  public static void sendSMS() {
+    SMS sms = new SMS();
+    System.out.println(sms.Messages());
     System.out.println("=========================================");
   }
 
-  public static void calculateSquare() {
-    try {
-    System.out.print("Digite o lado do quadrado (cm): ");
-    double side = scanner.nextDouble();
-
-    Square square = new Square(side);
-    System.out.printf("A área do quadrado é: %.2f%n", square.calculateArea());
-    
-    } catch (InputMismatchException e) {
-       System.out.println("Entrada inválida! Digite um número válido.");
-       scanner.nextLine(); // Limpa o buffer do scanner
-    }
+  public static void sendEmail() {
+    Email email = new Email();
+    System.out.println(email.Messages());
     System.out.println("=========================================");
-}
-
-  public static void calculateSphere() {
-    try {
-    System.out.print("Digite o raio da esfera (cm): ");
-    double radius = scanner.nextDouble();
-
-    Sphere sphere = new Sphere(radius);
-    System.out.printf("A área da esfera é: %.2f%n", sphere.calculateArea());
-    }
-    catch(InputMismatchException e) {
-       System.out.println("Entrada inválida! Digite um número válido.");
-       scanner.nextLine(); // Limpa o buffer do scanner
   }
-    System.out.println("=========================================");
 
+  public static void sendInstagram() {
+    Instagram instagram = new Instagram();
+    System.out.println(instagram.Messages());
+    System.out.println("=========================================");
+  }
+
+  public static void sendWhatsApp() {
+    Whatsapp whatsApp = new Whatsapp();
+    System.out.println(whatsApp.Messages());
+    System.out.println("=========================================");
+  }
+
+  public static void sendX() {
+    X x = new X();
+    System.out.println(x.Messages());
+    System.out.println("=========================================");
   }
 }
